@@ -1,3 +1,4 @@
+import 'package:dlna/dlna.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -28,12 +29,29 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  final dlnaService = DLNAManager();
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+  @override
+  void initState() {
+    super.initState();
+    final refresher = DeviceRefresher(
+      onDeviceAdd: (dlnaDevice) {
+        print('\n${DateTime.now()}\nadd ' + dlnaDevice.toString());
+      },
+      onDeviceRemove: (dlnaDevice) {
+        print('\n${DateTime.now()}\nremove ' + dlnaDevice.toString());
+      },
+      onDeviceUpdate: (dlnaDevice) {
+        print('\n${DateTime.now()}\nupdate ' + dlnaDevice.toString());
+      },
+      onSearchError: (error) {
+        print(error);
+      },
+      onPlayProgress: (positionInfo) {
+        print('current play progress ' + positionInfo.relTime);
+      },
+    );
+    dlnaService.setRefresher(refresher);
   }
 
   @override
@@ -50,14 +68,16 @@ class _MyHomePageState extends State<MyHomePage> {
               'You have pushed the button this many times:',
             ),
             Text(
-              '$_counter',
+              '---',
               style: Theme.of(context).textTheme.headline4,
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: () {
+          dlnaService.startSearch();
+        },
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ),
