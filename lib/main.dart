@@ -100,6 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
             onTap: () {
               title = 'set device';
               isConnecting = true;
+              setState(() {});
               dlnaService.setDevice(device);
             },
           );
@@ -109,6 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
         onPressed: () {
           devices.clear();
           title = 'searching...';
+          setState(() {});
           dlnaService.startSearch();
         },
         tooltip: 'Increment',
