@@ -1,3 +1,4 @@
+import 'package:dlna_demo/dlna_control.dart';
 import 'package:flutter/material.dart';
 
 class DlnaVideoControl extends StatelessWidget {
@@ -11,7 +12,15 @@ class DlnaVideoControl extends StatelessWidget {
         children: [
           IconButton(
             icon: Icon(Icons.play_arrow),
-            onPressed: () {},
+            onPressed: () {
+              DlnaConrol.shared.play();
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.pause),
+            onPressed: () {
+              DlnaConrol.shared.pause();
+            },
           ),
         ],
       ),

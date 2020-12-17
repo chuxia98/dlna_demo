@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:dlna/dlna.dart';
 import 'package:dlna_demo/dlna_control.dart';
+import 'package:dlna_demo/dlna_video_control.dart';
 import 'package:flutter/material.dart';
 
 const String url1 =
@@ -35,6 +38,24 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   bool isConnecting = false;
   String title = 'dlna';
+  StreamSubscription streamSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    streamSubscription = DlnaConrol.shared.stream.listen(listener);
+  }
+
+  void listener(event) {
+    setState(() {});
+  }
+
+  @override
+  void dispose() {
+    streamSubscription.cancel();
+    DlnaConrol.shared.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +75,9 @@ class _MyHomePageState extends State<MyHomePage> {
               title = 'connecting success';
               print(title);
               DlnaConrol.shared.setVideoUrl(url1);
+              final page = DlnaVideoControl();
+              final route = MaterialPageRoute(builder: (_) => page);
+              Navigator.of(context).push(route);
             },
           )
         ],
@@ -78,9 +102,7 @@ class _MyHomePageState extends State<MyHomePage> {
           DlnaConrol.shared.clear();
           title = 'searching...';
           print(title);
-          DlnaConrol.shared.search(hander: () {
-            setState(() {});
-          });
+          DlnaConrol.shared.search();
         },
         child: Icon(Icons.search),
       ),
