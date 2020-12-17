@@ -1,4 +1,5 @@
 import 'package:dlna/dlna.dart';
+import 'package:dlna_demo/dlna_control.dart';
 import 'package:flutter/material.dart';
 
 const String url1 =
@@ -31,90 +32,57 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-final dlnaService = DLNAManager();
-
 class _MyHomePageState extends State<MyHomePage> {
-  List<DLNADevice> devices = [];
   bool isConnecting = false;
   String title = 'dlna';
-
-  @override
-  void initState() {
-    super.initState();
-
-    devices.clear();
-    final refresher = DeviceRefresher(
-      onDeviceAdd: (dlnaDevice) {
-        devices.add(dlnaDevice);
-        setState(() {});
-        print('\n${DateTime.now()}\nadd ' + dlnaDevice.toString());
-      },
-      onDeviceRemove: (dlnaDevice) {
-        devices.remove(dlnaDevice);
-        setState(() {});
-        print('\n${DateTime.now()}\nremove ' + dlnaDevice.toString());
-      },
-      onDeviceUpdate: (dlnaDevice) {
-        devices.removeWhere((element) => element.uuid == dlnaDevice.uuid);
-        setState(() {});
-        // devices.remove(dlnaDevice);
-        print('\n${DateTime.now()}\nupdate ' + dlnaDevice.toString());
-      },
-      onSearchError: (error) {
-        print(error);
-      },
-      onPlayProgress: (positionInfo) {
-        print('current play progress ' + positionInfo.relTime);
-      },
-    );
-    dlnaService.setRefresher(refresher);
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(title),
+        centerTitle: true,
         actions: [
           IconButton(
             icon: Icon(Icons.settings),
             onPressed: () async {
               if (isConnecting == false) {
                 title = 'no device';
-                setState(() {});
+                print(title);
                 return;
               }
               title = 'connecting success';
-              final video = VideoObject('title', url1, VideoObject.VIDEO_MP4);
-              dlnaService.actSetVideoUrl(video);
+              print(title);
+              DlnaConrol.share.setVideoUrl(url1);
             },
           )
         ],
       ),
       body: ListView.builder(
-        itemCount: devices.length,
+        itemCount: DlnaConrol.share.devices.length,
         itemBuilder: (context, index) {
-          final device = devices[index];
+          final device = DlnaConrol.share.devices[index];
           return DeviceItem(
             device: device,
             onTap: () {
               title = 'set device';
               isConnecting = true;
-              setState(() {});
-              dlnaService.setDevice(device);
+              print(title);
+              DlnaConrol.share.setDevice(device);
             },
           );
         },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          devices.clear();
+          DlnaConrol.share.clear();
           title = 'searching...';
-          setState(() {});
-          dlnaService.startSearch();
+          print(title);
+          DlnaConrol.share.search(hander: () {
+            setState(() {});
+          });
         },
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
+        child: Icon(Icons.search),
       ),
     );
   }
@@ -134,6 +102,7 @@ class DeviceItem extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
+        color: Colors.red[100],
         alignment: Alignment.centerLeft,
         padding: EdgeInsets.all(15),
         child: Column(
