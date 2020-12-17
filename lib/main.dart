@@ -1,6 +1,9 @@
 import 'package:dlna/dlna.dart';
 import 'package:flutter/material.dart';
 
+const String url1 =
+    'https://cn-photo-wall.oss-cn-shanghai.aliyuncs.com/simple_videos/ForBiggerBlazes.mp4';
+
 void main() {
   runApp(MyApp());
 }
@@ -28,9 +31,12 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
+final dlnaService = DLNAManager();
+
 class _MyHomePageState extends State<MyHomePage> {
-  final dlnaService = DLNAManager();
   List<DLNADevice> devices = [];
+  bool isConnecting = false;
+  String title = 'dlna';
 
   @override
   void initState() {
@@ -69,30 +75,77 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: () async {
+              if (isConnecting == false) {
+                title = 'no device';
+                setState(() {});
+                return;
+              }
+              title = 'connecting success';
+              final video = VideoObject('title', url1, VideoObject.VIDEO_MP4);
+              dlnaService.actSetVideoUrl(video);
+            },
+          )
+        ],
       ),
       body: ListView.builder(
         itemCount: devices.length,
         itemBuilder: (context, index) {
           final device = devices[index];
-          return Container(
-            padding: EdgeInsets.all(15),
-            child: Column(
-              children: [
-                Text('DeviceName: ${device.deviceName}'),
-                SizedBox(height: 10),
-                Text('DeviceUuid: ${device.uuid}'),
-              ],
-            ),
+          return DeviceItem(
+            device: device,
+            onTap: () {
+              title = 'set device';
+              isConnecting = true;
+              dlnaService.setDevice(device);
+            },
           );
         },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           devices.clear();
+          title = 'searching...';
           dlnaService.startSearch();
         },
         tooltip: 'Increment',
         child: Icon(Icons.add),
+      ),
+    );
+  }
+}
+
+class DeviceItem extends StatelessWidget {
+  final DLNADevice device;
+  final Function onTap;
+
+  DeviceItem({
+    this.device,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        alignment: Alignment.centerLeft,
+        padding: EdgeInsets.all(15),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Flexible(
+              child: Text('DeviceName: ${device.deviceName}'),
+            ),
+            SizedBox(height: 10),
+            Flexible(
+              child: Text('DeviceUuid: ${device.uuid}'),
+            ),
+          ],
+        ),
       ),
     );
   }
