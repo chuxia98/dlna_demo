@@ -35,6 +35,10 @@ class DlnaConrol {
       },
     );
     _service.setRefresher(refresher);
+    _service.startSearch();
+    print('object 1 func $hander');
+    print('object 2 server $refresher');
+    print('object 3 server $_service');
 
     // Future.delayed(Duration(seconds: 2), () {
     //   final device = DLNADevice();
