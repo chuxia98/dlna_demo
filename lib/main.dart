@@ -53,32 +53,32 @@ class _MyHomePageState extends State<MyHomePage> {
               }
               title = 'connecting success';
               print(title);
-              DlnaConrol.share.setVideoUrl(url1);
+              DlnaConrol.shared.setVideoUrl(url1);
             },
           )
         ],
       ),
       body: ListView.builder(
-        itemCount: DlnaConrol.share.devices.length,
+        itemCount: DlnaConrol.shared.devices.length,
         itemBuilder: (context, index) {
-          final device = DlnaConrol.share.devices[index];
+          final device = DlnaConrol.shared.devices[index];
           return DeviceItem(
             device: device,
             onTap: () {
               title = 'set device';
               isConnecting = true;
               print(title);
-              DlnaConrol.share.setDevice(device);
+              DlnaConrol.shared.setDevice(device);
             },
           );
         },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          DlnaConrol.share.clear();
+          DlnaConrol.shared.clear();
           title = 'searching...';
           print(title);
-          DlnaConrol.share.search(hander: () {
+          DlnaConrol.shared.search(hander: () {
             setState(() {});
           });
         },

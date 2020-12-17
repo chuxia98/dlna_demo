@@ -1,10 +1,11 @@
 import 'package:dlna/dlna.dart';
 
 class DlnaConrol {
-  static DlnaConrol share = DlnaConrol._interal();
-  DlnaConrol._interal();
-
-  final _service = DLNAManager();
+  static DlnaConrol shared = DlnaConrol._interal();
+  DlnaConrol._interal() {
+    _service = DLNAManager();
+  }
+  DLNAManager _service;
   List<DLNADevice> _devices = [];
   List<DLNADevice> get devices => _devices;
 
@@ -12,25 +13,25 @@ class DlnaConrol {
     final refresher = DeviceRefresher(
       onDeviceAdd: (dlnaDevice) {
         _devices.add(dlnaDevice);
-        print('\n${DateTime.now()}\nadd ' + dlnaDevice.toString());
+        print('\n[cx] ${DateTime.now()}\n add ' + dlnaDevice.toString());
         hander?.call();
       },
       onDeviceRemove: (dlnaDevice) {
         _devices.remove(dlnaDevice);
-        print('\n${DateTime.now()}\nremove ' + dlnaDevice.toString());
+        print('\n[cx] ${DateTime.now()}\n remove ' + dlnaDevice.toString());
         hander?.call();
       },
       onDeviceUpdate: (dlnaDevice) {
         _devices.removeWhere((element) => element.uuid == dlnaDevice.uuid);
         // devices.remove(dlnaDevice);
-        print('\n${DateTime.now()}\nupdate ' + dlnaDevice.toString());
+        print('\n[cx] ${DateTime.now()}\n update ' + dlnaDevice.toString());
         hander?.call();
       },
       onSearchError: (error) {
-        print(error);
+        print('[cx] $error');
       },
       onPlayProgress: (positionInfo) {
-        print('current play progress ' + positionInfo.relTime);
+        print('[cx] current play progress ' + positionInfo.relTime);
       },
     );
     _service.setRefresher(refresher);
@@ -53,7 +54,7 @@ class DlnaConrol {
   }
 
   setVideoUrl(String url) {
-    final video = VideoObject('title', url, VideoObject.VIDEO_MP4);
+    final video = VideoObject('alna title', url, VideoObject.VIDEO_MP4);
     _service.actSetVideoUrl(video);
   }
 }
