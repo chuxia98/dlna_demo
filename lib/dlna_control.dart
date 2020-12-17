@@ -11,17 +11,17 @@ class DlnaConrol {
   search({Function hander}) {
     final refresher = DeviceRefresher(
       onDeviceAdd: (dlnaDevice) {
-        devices.add(dlnaDevice);
+        _devices.add(dlnaDevice);
         print('\n${DateTime.now()}\nadd ' + dlnaDevice.toString());
         hander?.call();
       },
       onDeviceRemove: (dlnaDevice) {
-        devices.remove(dlnaDevice);
+        _devices.remove(dlnaDevice);
         print('\n${DateTime.now()}\nremove ' + dlnaDevice.toString());
         hander?.call();
       },
       onDeviceUpdate: (dlnaDevice) {
-        devices.removeWhere((element) => element.uuid == dlnaDevice.uuid);
+        _devices.removeWhere((element) => element.uuid == dlnaDevice.uuid);
         // devices.remove(dlnaDevice);
         print('\n${DateTime.now()}\nupdate ' + dlnaDevice.toString());
         hander?.call();
