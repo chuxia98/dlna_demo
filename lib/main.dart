@@ -30,18 +30,28 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final dlnaService = DLNAManager();
+  List<DLNADevice> devices = [];
 
   @override
   void initState() {
     super.initState();
+
+    devices.clear();
     final refresher = DeviceRefresher(
       onDeviceAdd: (dlnaDevice) {
+        devices.add(dlnaDevice);
+        setState(() {});
         print('\n${DateTime.now()}\nadd ' + dlnaDevice.toString());
       },
       onDeviceRemove: (dlnaDevice) {
+        devices.remove(dlnaDevice);
+        setState(() {});
         print('\n${DateTime.now()}\nremove ' + dlnaDevice.toString());
       },
       onDeviceUpdate: (dlnaDevice) {
+        devices.removeWhere((element) => element.uuid == dlnaDevice.uuid);
+        setState(() {});
+        // devices.remove(dlnaDevice);
         print('\n${DateTime.now()}\nupdate ' + dlnaDevice.toString());
       },
       onSearchError: (error) {
@@ -60,22 +70,25 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
+      body: ListView.builder(
+        itemCount: devices.length,
+        itemBuilder: (context, index) {
+          final device = devices[index];
+          return Container(
+            padding: EdgeInsets.all(15),
+            child: Column(
+              children: [
+                Text('DeviceName: ${device.deviceName}'),
+                SizedBox(height: 10),
+                Text('DeviceUuid: ${device.uuid}'),
+              ],
             ),
-            Text(
-              '---',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          devices.clear();
           dlnaService.startSearch();
         },
         tooltip: 'Increment',
