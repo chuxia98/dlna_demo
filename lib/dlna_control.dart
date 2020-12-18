@@ -40,7 +40,7 @@ class DlnaConrol {
   List<DLNADevice> _devices = [];
   List<DLNADevice> get devices => _devices;
 
-  search() {
+  void search() {
     _service.startSearch();
     // Future.delayed(Duration(seconds: 2), () {
     //   final device = DLNADevice();
@@ -51,15 +51,15 @@ class DlnaConrol {
     // });
   }
 
-  clear() {
+  void clear() {
     _devices.clear();
   }
 
-  setDevice(DLNADevice device) {
+  void setDevice(DLNADevice device) {
     _service.setDevice(device);
   }
 
-  setVideoUrl(String url) async {
+  void setVideoUrl(String url) async {
     final video = VideoObject('alna title', url, VideoObject.VIDEO_MP4);
     final result = await _service.actSetVideoUrl(video);
     _debugPrint(result);
@@ -75,9 +75,16 @@ class DlnaConrol {
     _debugPrint(result);
   }
 
+  double _percent = 0;
+  double get percent => _percent;
+
   void getProgress() async {
-    _service.actGetPositionInfo();
-    // _service.actGetTransportInfo();
+    final result = await _service.actGetPositionInfo();
+    if (result.success) {
+      final position = result.result;
+      _percent = position.elapsedPercent;
+      print('object percent $_percent');
+    }
   }
 
   void _debugPrint(DLNAActionResult<String> result) {
