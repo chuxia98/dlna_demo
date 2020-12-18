@@ -62,19 +62,30 @@ class DlnaConrol {
   setVideoUrl(String url) async {
     final video = VideoObject('alna title', url, VideoObject.VIDEO_MP4);
     final result = await _service.actSetVideoUrl(video);
+    _debugPrint(result);
+  }
+
+  void play() async {
+    final result = await _service.actPlay();
+    _debugPrint(result);
+  }
+
+  void pause() async {
+    final result = await _service.actPause();
+    _debugPrint(result);
+  }
+
+  void getProgress() async {
+    _service.actGetPositionInfo();
+    // _service.actGetTransportInfo();
+  }
+
+  void _debugPrint(DLNAActionResult<String> result) {
     if (result.success) {
       print('connect success');
     } else {
       print('[cx] ${result.errorMessage}');
     }
-  }
-
-  void play() {
-    _service.actPlay();
-  }
-
-  void pause() {
-    _service.actPause();
   }
 
   void dispose() {

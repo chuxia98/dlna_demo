@@ -36,8 +36,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  bool isConnecting = false;
-  String title = 'dlna';
   StreamSubscription streamSubscription;
 
   @override
@@ -61,26 +59,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: Text('DLNA'),
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.settings),
-            onPressed: () async {
-              if (isConnecting == false) {
-                title = 'no device';
-                print(title);
-                return;
-              }
-              title = 'connecting success';
-              print(title);
-              DlnaConrol.shared.setVideoUrl(url1);
-              final page = DlnaVideoControl();
-              final route = MaterialPageRoute(builder: (_) => page);
-              Navigator.of(context).push(route);
-            },
-          )
-        ],
       ),
       body: ListView.builder(
         itemCount: DlnaConrol.shared.devices.length,
@@ -89,10 +69,12 @@ class _MyHomePageState extends State<MyHomePage> {
           return DeviceItem(
             device: device,
             onTap: () {
-              title = 'set device';
-              isConnecting = true;
-              print(title);
               DlnaConrol.shared.setDevice(device);
+              print('connecting success');
+              DlnaConrol.shared.setVideoUrl(url1);
+              final page = DlnaVideoControl();
+              final route = MaterialPageRoute(builder: (_) => page);
+              Navigator.of(context).push(route);
             },
           );
         },
@@ -100,8 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           DlnaConrol.shared.clear();
-          title = 'searching...';
-          print(title);
+          print('searching...');
           DlnaConrol.shared.search();
         },
         child: Icon(Icons.search),
