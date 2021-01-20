@@ -8,6 +8,9 @@ import 'package:flutter/material.dart';
 const String url1 =
     'https://cn-photo-wall.oss-cn-shanghai.aliyuncs.com/simple_videos/ForBiggerBlazes.mp4';
 
+const String kURLSimple =
+    'https://cn-photo-wall.oss-cn-shanghai.aliyuncs.com/simple_videos/ForBiggerBlazes.mp4';
+
 void main() {
   runApp(MyApp());
 }
@@ -84,8 +87,8 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           DlnaConrol.shared.clear();
-          MySnackBar.show(context, 'searching...');
           DlnaConrol.shared.search();
+          MySnackBar.show(context, 'searching...');
         },
         child: Icon(Icons.search),
       ),

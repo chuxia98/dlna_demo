@@ -75,6 +75,11 @@ class DlnaConrol {
     _debugPrint(result);
   }
 
+  void stop() async {
+    final result = await _service.actStop();
+    _debugPrint(result);
+  }
+
   double _percent = 0;
   double get percent => _percent;
 

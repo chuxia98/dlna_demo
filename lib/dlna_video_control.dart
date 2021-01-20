@@ -22,6 +22,21 @@ class DlnaVideoControl extends StatelessWidget {
               DlnaConrol.shared.pause();
             },
           ),
+          IconButton(
+            icon: Icon(Icons.stop),
+            onPressed: () {
+              DlnaConrol.shared.stop();
+            },
+          ),
+          Container(
+            height: 100,
+            child: StreamBuilder(
+              stream: DlnaConrol.shared.stream,
+              builder: (context, snap) {
+                return Text('data ${DlnaConrol.shared.percent}');
+              },
+            ),
+          ),
         ],
       ),
     );
