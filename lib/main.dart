@@ -21,7 +21,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: Scaffold(
+        body: MyHomePage(title: 'Flutter Demo Home Page'),
+      ),
     );
   }
 }
@@ -70,8 +72,8 @@ class _MyHomePageState extends State<MyHomePage> {
             device: device,
             onTap: () {
               DlnaConrol.shared.setDevice(device);
-              print('connecting success');
               DlnaConrol.shared.setVideoUrl(url1);
+              MySnackBar.show(context, 'connecting success');
               final page = DlnaVideoControl();
               final route = MaterialPageRoute(builder: (_) => page);
               Navigator.of(context).push(route);
@@ -82,10 +84,25 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           DlnaConrol.shared.clear();
-          print('searching...');
+          MySnackBar.show(context, 'searching...');
           DlnaConrol.shared.search();
         },
         child: Icon(Icons.search),
+      ),
+    );
+  }
+}
+
+class MySnackBar {
+  static void show(BuildContext context, String text) {
+    Scaffold.of(context).showSnackBar(
+      SnackBar(
+        content: Container(
+          child: Text(
+            text,
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
       ),
     );
   }
