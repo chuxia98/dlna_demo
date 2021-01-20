@@ -49,8 +49,19 @@ class DlnaConrol {
   List<DLNADevice> _devices = [];
   List<DLNADevice> get devices => _devices;
 
-  void search() {
+  bool _isSearching = false;
+  bool get isSearching => _isSearching;
+
+  Future<void> search([Duration duration = const Duration(seconds: 30)]) async {
     _service.startSearch();
+    _isSearching = true;
+    await Future.delayed(duration);
+    _isSearching = false;
+    stopSearch();
+  }
+
+  void stopSearch() {
+    _service.stopSearch();
   }
 
   void clear() {

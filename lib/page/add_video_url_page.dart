@@ -1,5 +1,6 @@
-import 'package:dlna_demo/const.dart';
+import 'package:dlna_demo/const/const.dart';
 import 'package:flutter/material.dart';
+
 import 'widgets/widgets.dart';
 
 class AddVideoUrlPage extends StatelessWidget {

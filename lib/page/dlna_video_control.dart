@@ -1,7 +1,8 @@
 import 'dart:async';
 
-import 'package:dlna_demo/dlna_control.dart';
 import 'package:flutter/material.dart';
+
+import '../control/dlna.dart';
 import 'widgets/widgets.dart';
 
 class DlnaVideoControl extends StatefulWidget {
