@@ -56,7 +56,11 @@ class DlnaConrol {
     _devices.clear();
   }
 
+  DLNADevice _device;
+  DLNADevice get device => _device;
+
   void setDevice(DLNADevice device) {
+    _device = device;
     _service.setDevice(device);
   }
 
@@ -78,6 +82,7 @@ class DlnaConrol {
 
   void stop() async {
     final result = await _service.actStop();
+    _device = null;
     _debugPrint(result);
   }
 

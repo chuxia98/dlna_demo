@@ -1,15 +1,12 @@
 import 'dart:async';
 
 import 'package:dlna/dlna.dart';
+import 'package:dlna_demo/const.dart';
 import 'package:dlna_demo/dlna_control.dart';
 import 'package:dlna_demo/dlna_video_control.dart';
 import 'package:flutter/material.dart';
 
-const String url1 =
-    'https://cn-photo-wall.oss-cn-shanghai.aliyuncs.com/simple_videos/ForBiggerBlazes.mp4';
-
-const String kURLSimple =
-    'https://cn-photo-wall.oss-cn-shanghai.aliyuncs.com/simple_videos/ForBiggerBlazes.mp4';
+import 'widgets/widgets.dart';
 
 void main() {
   runApp(MyApp());
@@ -67,14 +64,14 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text('DLNA'),
         centerTitle: true,
         actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {
-              final page = DlnaVideoControl();
-              final route = MaterialPageRoute(builder: (_) => page);
-              Navigator.of(context).push(route);
-            },
-          ),
+          // IconButton(
+          //   icon: Icon(Icons.add),
+          //   onPressed: () {
+          //     final page = DlnaVideoControl();
+          //     final route = MaterialPageRoute(builder: (_) => page);
+          //     Navigator.of(context).push(route);
+          //   },
+          // ),
         ],
       ),
       body: ListView.builder(
@@ -84,9 +81,13 @@ class _MyHomePageState extends State<MyHomePage> {
           return DeviceItem(
             device: device,
             onTap: () {
-              DlnaConrol.shared.setDevice(device);
-              DlnaConrol.shared.setVideoUrl(url1);
-              MySnackBar.show(context, 'connecting success');
+              if (DlnaConrol.shared.device?.uuid != device.uuid) {
+                DlnaConrol.shared.setDevice(device);
+                DlnaConrol.shared.setVideoUrl(kURLSimple);
+                MySnackBar.show(context, 'connecting success');
+              } else {
+                MySnackBar.show(context, 'already connected');
+              }
               final page = DlnaVideoControl();
               final route = MaterialPageRoute(builder: (_) => page);
               Navigator.of(context).push(route);
@@ -96,26 +97,11 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          MySnackBar.show(context, 'searching...');
           DlnaConrol.shared.clear();
           DlnaConrol.shared.search();
-          MySnackBar.show(context, 'searching...');
         },
         child: Icon(Icons.search),
-      ),
-    );
-  }
-}
-
-class MySnackBar {
-  static void show(BuildContext context, String text) {
-    Scaffold.of(context).showSnackBar(
-      SnackBar(
-        content: Container(
-          child: Text(
-            text,
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
       ),
     );
   }

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dlna_demo/dlna_control.dart';
 import 'package:flutter/material.dart';
+import 'widgets/widgets.dart';
 
 class DlnaVideoControl extends StatefulWidget {
   @override
@@ -39,22 +40,25 @@ class _DlnaVideoControlState extends State<DlnaVideoControl> {
             icon: Icon(Icons.play_arrow),
             onPressed: () {
               DlnaConrol.shared.play();
+              MySnackBar.show(context, '点击播放');
             },
           ),
           IconButton(
             icon: Icon(Icons.pause),
             onPressed: () {
               DlnaConrol.shared.pause();
+              MySnackBar.show(context, '点击暂停');
             },
           ),
           IconButton(
             icon: Icon(Icons.stop),
             onPressed: () {
               DlnaConrol.shared.stop();
+              MySnackBar.show(context, '点击停止');
+              Navigator.of(context).pop();
             },
           ),
           Container(
-            // height: 100,
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: StreamBuilder(
               stream: DlnaConrol.shared.stream,
