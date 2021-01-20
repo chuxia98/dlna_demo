@@ -28,10 +28,18 @@ class DlnaConrol {
       },
       onPlayProgress: (positionInfo) {
         print('[cx] current play progress ' + positionInfo.relTime);
-        _controller.add(positionInfo);
+        _refresh(positionInfo);
       },
     );
     _service.setRefresher(refresher);
+  }
+
+  PositionInfo _info;
+  PositionInfo get info => _info;
+
+  void _refresh(PositionInfo info) {
+    _info = info;
+    _controller.add(info);
   }
 
   final _controller = StreamController.broadcast();
@@ -41,15 +49,8 @@ class DlnaConrol {
   List<DLNADevice> _devices = [];
   List<DLNADevice> get devices => _devices;
 
-  int count = 0;
   void search() {
     _service.startSearch();
-
-    Timer.periodic(Duration(seconds: 1), (timer) {
-      print('object timer $count');
-      count++;
-      _controller.sink.add('count');
-    });
   }
 
   void clear() {
@@ -89,15 +90,11 @@ class DlnaConrol {
   double _percent = 0;
   double get percent => _percent;
 
-  PositionInfo _info;
-  PositionInfo get info => _info;
-
   Future<PositionInfo> getProgress() async {
     final result = await _service.actGetPositionInfo();
     if (result.success) {
       final position = result.result;
       _percent = position.elapsedPercent;
-      print('object percent $_percent');
       _info = result.result;
       return _info;
     }

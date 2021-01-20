@@ -69,7 +69,6 @@ class _DlnaVideoControlState extends State<DlnaVideoControl> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _Item(title: 'time', subtitle: '${shared.count}'),
                     _Item(title: 'title', subtitle: info?.title ?? '-'),
                     _Item(title: 'track', subtitle: info?.track ?? '-'),
                     _Item(

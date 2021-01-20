@@ -1,3 +1,4 @@
+import 'package:dlna_demo/const.dart';
 import 'package:flutter/material.dart';
 import 'widgets/widgets.dart';
 
@@ -33,7 +34,11 @@ class AddVideoUrlPage extends StatelessWidget {
           ),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            child: Text('data'),
+            child: Text(
+              '默认播放视频URL:\n $kURLSimple',
+              style: TextStyle(),
+              maxLines: 10,
+            ),
           ),
         ],
       ),
