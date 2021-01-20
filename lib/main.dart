@@ -66,6 +66,16 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text('DLNA'),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () {
+              final page = DlnaVideoControl();
+              final route = MaterialPageRoute(builder: (_) => page);
+              Navigator.of(context).push(route);
+            },
+          ),
+        ],
       ),
       body: ListView.builder(
         itemCount: DlnaConrol.shared.devices.length,
